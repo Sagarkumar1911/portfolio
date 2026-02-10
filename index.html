@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sagar | Data Science Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #050a14;
+            --bg-card: #0f172a;
+            --primary: #3b82f6; /* Deep Blue */
+            --accent: #d946ef; /* Magenta/Pink */
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #d946ef 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- Canvas Background --- */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(5, 10, 20, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .admin-btn {
+            margin-left: 2rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* --- Layout & Sections --- */
+        section {
+            padding: 6rem 10%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            text-align: center;
+            align-items: center;
+        }
+
+        .profile-img-container {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            padding: 4px;
+            background: var(--accent-gradient);
+            margin-bottom: 2rem;
+            box-shadow: 0 0 30px rgba(217, 70, 239, 0.3);
+            animation: pulse 3s infinite;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--bg-card);
+            border: 4px solid var(--bg-dark);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .gradient-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: var(--accent-gradient);
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* --- Skills Section --- */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            border-color: rgba(217, 70, 239, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(217, 70, 239, 0.15);
+        }
+
+        .cat-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.5, 1);
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+        }
+
+        /* --- Projects Section --- */
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            height: 400px; /* Fixed height for consistency */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .project-img {
+            height: 180px;
+            width: 100%;
+            background: #1e293b;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(255,255,255,0.1);
+            background: linear-gradient(45deg, #0f172a, #1e293b);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-tag {
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border-radius: 4px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-link {
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .btn-link:hover {
+            color: var(--accent);
+        }
+
+        /* --- Education Section --- */
+        .edu-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        .timeline {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 3rem;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .gpa-card {
+            flex: 1;
+            min-width: 250px;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gpa-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gpa-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .gpa-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #020617;
+            padding: 4rem 10% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-info p {
+            color: var(--text-muted);
+            max-width: 300px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- Admin Modal (Hidden by default) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--accent);
+        }
+
+        .modal input, .modal textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 4px;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(217, 70, 239, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(217, 70, 239, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(217, 70, 239, 0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            section { padding: 4rem 5%; }
+            nav { padding: 1rem; }
+            .nav-links { display: none; } /* Simplified for mobile */
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <nav>
+        <div class="logo">SAGAR<span style="color:var(--accent);"></span></div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#education">Education</a>
+            <button class="admin-btn" onclick="openAdmin()">Login</button>
+        </div>
+    </nav>
+
+    <section id="about">
+        <div id="hero">
+            <div class="profile-img-container">
+                <div style="width:100%; height:100%; background:#1e293b; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;"><i class="fas fa-user"></i></div>
+            </div>
+            <h1 class="hero-title">Hi, I'm <span class="gradient-text">Sagar</span></h1>
+            <p class="hero-subtitle">Data Science Student & AI Enthusiast</p>
+            <p style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); line-height: 1.6;">
+                I craft intelligent systems and tell stories with data. Specialized in Deep Learning, Generative AI, and MLOps. Currently pursuing B.Tech in Data Science at Manipal University Jaipur.
+            </p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/sagar-kumar-a51153289/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/Sagarkumar1911" class="social-icon"><i class="fab fa-github"></i></a>
+                
+                <a href="mailto:kumarsagarf@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Technical <span class="gradient-text">Skills</span></h2>
+        <div class="skills-container" id="skills-grid">
+            </div>
+    </section>
+
+    <section id="projects">
+        <h2>My <span class="gradient-text">Projects</span></h2>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+            <button class="filter-btn" onclick="filterProjects('Deep Learning')">Deep Learning</button>
+            <button class="filter-btn" onclick="filterProjects('Web Dev')">Web Dev</button>
+            <button class="filter-btn" onclick="filterProjects('Data Science')">Data Science</button>
+        </div>
+
+        <div class="projects-grid" id="projects-grid">
+            </div>
+    </section>
+
+    <section id="education">
+        <h2>Education & <span class="gradient-text">Timeline</span></h2>
+        <div class="edu-container">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2023 - 2027 (Expected)</div>
+                    <h3 class="timeline-title">B.Tech in Data Science</h3>
+                    <p class="timeline-subtitle">Manipal University Jaipur</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Focused on Algorithms, Neural Networks, Database Management (NoSQL), and Big Data Analytics. 
+                        Active participant in hackathons (Kharagpur Data Science Hackathon 2026).
+                    </p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2026</div>
+                    <h3 class="timeline-title">Team SSD</h3>
+                    <p class="timeline-subtitle">Project Lead</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Led development of "Sarathi AI" and "CinaMatch AI" utilizing multimodal learning companions and recommendation engines.
+                    </p>
+                </div>
+            </div>
+
+            <div class="gpa-card">
+                <h3 style="margin-bottom: 2rem;">Academic Performance</h3>
+                <div class="gpa-circle">
+                    <canvas id="gpaChart"></canvas>
+                    <div style="position: absolute; text-align: center;">
+                        <div class="gpa-value">8.2</div>
+                        <div class="gpa-label">CGPA</div>
+                    </div>
+                </div>
+                <div class="tech-stack" style="justify-content: center; margin-top: 1rem;">
+                    <span class="tech-badge" style="background:rgba(217, 70, 239, 0.1); color:var(--accent);">Dean's List</span>
+                    <span class="tech-badge" style="background:rgba(217, 70, 239, 0.1); color:var(--accent);">Top 10%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Sagar</h3>
+                <p>Turning complex data into actionable insights and intelligent applications.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom:1rem;">Quick Links</h4>
+                <ul style="list-style:none; line-height:2; color:var(--text-muted);">
+                    <li><a href="#about" style="color:inherit; text-decoration:none;">Home</a></li>
+                    <li><a href="#projects" style="color:inherit; text-decoration:none;">Portfolio</a></li>
+                    <li><a href="mailto:kumarsagarf@gmail.com" style="color:inherit; text-decoration:none;">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Sagar. Built with pure Data Science energy.
+        </div>
+    </footer>
+
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Admin Login</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Enter admin credentials to manage content.</p>
+            <input type="email" placeholder="Admin Email">
+            <input type="password" placeholder="Password">
+            <div style="display:flex; justify-content:space-between;">
+                <button class="modal-btn" onclick="closeAdmin()" style="background:transparent; border:1px solid var(--text-muted);">Cancel</button>
+                <button class="modal-btn" onclick="alert('In a real deployment, this would authenticate with Firebase Auth.'); closeAdmin();">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Data Configuration (Mock DB) ---
+        // This mimics the structure you'd store in Firebase
+        const portfolioData = {
+            skills: [
+                { category: 'AI & ML', items: [
+                    { name: 'Deep Learning', level: 90 },
+                    { name: 'Generative AI', level: 85 },
+                    { name: 'MLOps', level: 75 },
+                    { name: 'Computer Vision', level: 80 }
+                ]},
+                { category: 'Programming', items: [
+                    { name: 'Python', level: 95 },
+                    { name: 'C/C++', level: 85 },
+                    { name: 'SQL / NoSQL', level: 80 },
+                    { name: 'JavaScript', level: 70 }
+                ]},
+                { category: 'Tools', items: [
+                    { name: 'TensorFlow/PyTorch', level: 85 },
+                    { name: 'Git/GitHub', level: 90 },
+                    { name: 'Docker', level: 65 }
+                ]}
+            ],
+            projects: [
+                {
+                    title: 'Sarathi AI',
+                    desc: 'A multimodal AI-powered learning companion designed to assist students with personalized educational content.',
+                    tags: ['GenAI', 'Deep Learning', 'Education'],
+                    category: 'Deep Learning',
+                    stack: ['Python', 'LLMs', 'React']
+                },
+                {
+                    title: 'CinaMatch AI',
+                    desc: 'Full-stack movie recommendation system utilizing collaborative filtering and content-based recommendation algorithms.',
+                    tags: ['Recommendation System', 'Full Stack'],
+                    category: 'Web Dev',
+                    stack: ['Python', 'Flask', 'React', 'Sklearn']
+                },
+                {
+                    title: 'Heart Disease Prediction',
+                    desc: 'Medical diagnosis support tool using Machine Learning classifiers (KNN, SVM, Logistic Regression) to predict heart risks.',
+                    tags: ['Healthcare', 'Classification'],
+                    category: 'Data Science',
+                    stack: ['Pandas', 'Scikit-Learn', 'Matplotlib']
+                },
+                {
+                    title: 'Library Management',
+                    desc: 'A robust system for managing book inventories and user records, demonstrating core C++ and data structure algorithms.',
+                    tags: ['System Design', 'Algorithms'],
+                    category: 'Web Dev',
+                    stack: ['C++', 'Data Structures']
+                }
+            ]
+        };
+
+        // --- 2. Dynamic Content Rendering ---
+
+        // Render Skills
+        const skillsGrid = document.getElementById('skills-grid');
+        portfolioData.skills.forEach(cat => {
+            let catHTML = `<div class="skill-category">
+                <div class="cat-title"><i class="fas fa-code"></i> ${cat.category}</div>`;
+            
+            cat.items.forEach(skill => {
+                catHTML += `
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>${skill.name}</span>
+                        <span>${skill.level}%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: ${skill.level}%"></div>
+                    </div>
+                </div>`;
+            });
+            catHTML += `</div>`;
+            skillsGrid.innerHTML += catHTML;
+        });
+
+        // Render Projects
+        const projectsGrid = document.getElementById('projects-grid');
+        function renderProjects(filter = 'all') {
+            projectsGrid.innerHTML = '';
+            portfolioData.projects.forEach(proj => {
+                if (filter === 'all' || proj.category === filter || proj.tags.includes(filter)) {
+                    // Create Tech Stack badges
+                    const stackHTML = proj.stack.map(t => `<span class="tech-badge">${t}</span>`).join('');
+                    
+                    const card = `
+                    <div class="project-card">
+                        <div class="project-img">
+                            <div class="project-img-placeholder">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-tag">${proj.category}</div>
+                            <h3 class="project-title">${proj.title}</h3>
+                            <p class="project-desc">${proj.desc}</p>
+                            <div class="tech-stack">${stackHTML}</div>
+                            <div class="project-links">
+                                <a href="#" class="btn-link"><i class="fab fa-github"></i> Code</a>
+                                <a href="#" class="btn-link"><i class="fas fa-external-link-alt"></i> Demo</a>
+                            </div>
+                        </div>
+                    </div>`;
+                    projectsGrid.innerHTML += card;
+                }
+            });
+        }
+        renderProjects(); // Initial load
+
+        // Filter Logic
+        function filterProjects(category) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProjects(category);
+        }
+
+        // --- 3. GPA Chart (Chart.js) ---
+        const ctx = document.getElementById('gpaChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Remaining'],
+                datasets: [{
+                    data: [8.2, 1.8], // 8.2 out of 10
+                    backgroundColor: ['#d946ef', 'rgba(255, 255, 255, 0.05)'],
+                    borderWidth: 0,
+                    cutout: '85%',
+                    borderRadius: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                animation: { animateScale: true, animateRotate: true }
+            }
+        });
+
+        // --- 4. Particle Background Animation (Canvas) ---
+        const canvas = document.getElementById('particle-canvas');
+        const c = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const particleCount = 60; // Number of nodes
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                c.beginPath();
+                c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                c.fillStyle = '#3b82f6';
+                c.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            c.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+
+                // Draw connections (Neural Network effect)
+                for (let j = index + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    
+                    if (dist < 150) {
+                        c.beginPath();
+                        c.strokeStyle = `rgba(59, 130, 246, ${1 - dist/150})`;
+                        c.lineWidth = 1;
+                        c.moveTo(p.x, p.y);
+                        c.lineTo(p2.x, p2.y);
+                        c.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        // --- 5. Admin Panel Logic ---
+        function openAdmin() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+    </script>
+</body>
+</html>
