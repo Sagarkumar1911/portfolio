@@ -1,8 +1,4 @@
-// script.js
 
-// ==========================================
-// 1. FIREBASE CONFIGURATION 
-// ==========================================
 let db;
 try {
     if (typeof CONFIG === 'undefined') {
@@ -17,9 +13,7 @@ try {
     console.error("Firebase Error:", error);
 }
 
-// ==========================================
-// 2. DATA (Edit your Portfolio here)
-// ==========================================
+
 const localData = {
     skills: [
         { category: 'AI & ML', items: [
@@ -71,9 +65,7 @@ const localData = {
     ]
 };
 
-// ==========================================
-// 3. LOGIC: Fetch & Render
-// ==========================================
+
 
 async function loadContent() {
     if (!db) { renderLocalData(); return; }

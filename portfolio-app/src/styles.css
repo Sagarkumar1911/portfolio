@@ -1,14 +1,14 @@
 :root {
     /* Color Palette */
-    --bg-dark: #050a14;
-    --bg-card: #0f172a;
-    --primary: #3b82f6; /* Bright Blue */
-    --accent: #d946ef;  /* Magenta */
-    --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #d946ef 100%);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --glass: rgba(15, 23, 42, 0.7);
-    --border-light: rgba(255, 255, 255, 0.05);
+    --bg-dark: #0a0a0a;
+    --bg-card: #141414;
+    --primary: #ffffff;
+    --accent: #ffffff;
+    --accent-gradient: #ffffff;
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+    --glass: rgba(20, 20, 20, 0.7);
+    --border-light: rgba(255, 255, 255, 0.15);
 }
 
 /* --- Reset & Global --- */
@@ -35,7 +35,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    background: var(--bg-dark);
 }
 
 /* --- Navigation --- */
@@ -49,7 +49,7 @@ nav {
     align-items: center;
     z-index: 1000;
     backdrop-filter: blur(12px);
-    background: rgba(5, 10, 20, 0.85);
+    background: rgba(10, 10, 10, 0.85);
     border-bottom: 1px solid var(--border-light);
     transition: all 0.3s ease;
 }
@@ -58,9 +58,7 @@ nav {
     font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: 1px;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-main);
 }
 
 .nav-links {
@@ -78,15 +76,15 @@ nav {
 }
 
 .nav-links a:hover {
-    color: var(--accent);
+    color: var(--text-main);
 }
 
 .admin-btn {
     margin-left: 2rem;
     padding: 0.5rem 1.2rem;
     background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
+    border: 1px solid var(--text-main);
+    color: var(--text-main);
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
@@ -94,9 +92,8 @@ nav {
 }
 
 .admin-btn:hover {
-    background: var(--accent);
-    color: white;
-    box-shadow: 0 0 15px rgba(217, 70, 239, 0.4);
+    background: var(--text-main);
+    color: #000;
 }
 
 /* --- Layout Sections --- */
@@ -123,14 +120,12 @@ h2::after {
     bottom: -10px;
     width: 60px;
     height: 4px;
-    background: var(--accent-gradient);
+    background: var(--text-main);
     border-radius: 2px;
 }
 
 .gradient-text {
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-main);
 }
 
 /* --- Hero Section --- */
@@ -147,21 +142,19 @@ h2::after {
     height: 180px;
     border-radius: 50%;
     padding: 4px;
-    background: var(--accent-gradient);
+    background: var(--border-light);
     margin-bottom: 2rem;
-    box-shadow: 0 0 30px rgba(217, 70, 239, 0.3);
-    animation: pulse 3s infinite;
 }
 
 .profile-placeholder {
     width: 100%;
     height: 100%;
-    background: #1e293b;
+    background: var(--bg-card);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-main);
     font-size: 3rem;
     border: 4px solid var(--bg-dark);
 }
@@ -175,7 +168,7 @@ h2::after {
 
 .hero-subtitle {
     font-size: 1.5rem;
-    color: var(--accent);
+    color: var(--text-muted);
     margin-bottom: 1.5rem;
     font-weight: 600;
 }
@@ -208,9 +201,9 @@ h2::after {
 
 .social-icon:hover {
     transform: translateY(-5px);
-    background: var(--accent-gradient);
+    background: var(--text-main);
     border-color: transparent;
-    color: white;
+    color: #000;
 }
 
 /* --- Skills Section --- */
@@ -230,8 +223,7 @@ h2::after {
 
 .skill-category:hover {
     transform: translateY(-5px);
-    border-color: rgba(217, 70, 239, 0.3);
-    box-shadow: 0 10px 30px -10px rgba(217, 70, 239, 0.15);
+    border-color: var(--text-main);
 }
 
 .progress-bar-bg {
@@ -245,7 +237,7 @@ h2::after {
 
 .progress-bar-fill {
     height: 100%;
-    background: var(--accent-gradient);
+    background: var(--text-main);
     border-radius: 4px;
     transition: width 1.5s ease-in-out;
 }
@@ -270,8 +262,8 @@ h2::after {
 }
 
 .filter-btn:hover, .filter-btn.active {
-    background: var(--accent-gradient);
-    color: white;
+    background: var(--text-main);
+    color: #000;
     border-color: transparent;
 }
 
@@ -294,13 +286,12 @@ h2::after {
 
 .project-card:hover {
     transform: translateY(-10px);
-    border-color: rgba(59, 130, 246, 0.4);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--text-main);
 }
 
 .project-img {
     height: 160px;
-    background: #1e293b;
+    background: var(--bg-dark);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -318,8 +309,8 @@ h2::after {
 .tech-badge {
     font-size: 0.75rem;
     padding: 0.3rem 0.8rem;
-    background: rgba(59, 130, 246, 0.1);
-    color: #60a5fa;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
     border-radius: 4px;
     margin-right: 6px;
     margin-bottom: 6px;
@@ -354,21 +345,20 @@ h2::after {
     top: 5px;
     width: 10px;
     height: 10px;
-    background: var(--accent);
+    background: var(--text-main);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent);
 }
 
 .timeline-date {
     font-size: 0.9rem;
-    color: var(--accent);
+    color: var(--text-muted);
     margin-bottom: 0.5rem;
     font-weight: 700;
 }
 
 .timeline-title {
     font-size: 1.4rem;
-    color: white;
+    color: var(--text-main);
     margin-bottom: 0.25rem;
 }
 
@@ -408,7 +398,7 @@ h2::after {
 .gpa-value {
     font-size: 2.8rem;
     font-weight: 800;
-    color: white;
+    color: var(--text-main);
 }
 
 .gpa-label {
@@ -418,7 +408,7 @@ h2::after {
     letter-spacing: 2px;
 }
 
-/* --- Contact Section (NEW) --- */
+/* --- Contact Section --- */
 .contact-container {
     max-width: 600px;
     margin: 0 auto;
@@ -426,7 +416,6 @@ h2::after {
     padding: 2.5rem;
     border-radius: 16px;
     border: 1px solid var(--border-light);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .form-group {
@@ -439,24 +428,23 @@ input, textarea {
     background: var(--bg-dark);
     border: 1px solid var(--border-light);
     border-radius: 8px;
-    color: white;
+    color: var(--text-main);
     font-size: 1rem;
     transition: 0.3s;
 }
 
 input:focus, textarea:focus {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 10px rgba(217, 70, 239, 0.2);
+    border-color: var(--text-main);
 }
 
 .contact-btn {
     width: 100%;
     padding: 1rem;
-    background: var(--accent-gradient);
+    background: var(--text-main);
     border: none;
     border-radius: 8px;
-    color: white;
+    color: #000;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
@@ -465,12 +453,11 @@ input:focus, textarea:focus {
 
 .contact-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(217, 70, 239, 0.4);
 }
 
 /* --- Footer --- */
 footer {
-    background: #020617;
+    background: var(--bg-card);
     padding: 4rem 10% 2rem;
     border-top: 1px solid var(--border-light);
     margin-top: 4rem;
@@ -487,7 +474,7 @@ footer {
 .footer-info h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: white;
+    color: var(--text-main);
 }
 
 .footer-info p {
@@ -510,7 +497,7 @@ footer {
 }
 
 .footer-content a:hover {
-    color: var(--accent);
+    color: var(--text-main);
 }
 
 .footer-bottom {
@@ -527,13 +514,12 @@ footer {
     bottom: 30px;
     right: 30px;
     background: var(--bg-card);
-    border: 1px solid var(--accent);
-    color: white;
+    border: 1px solid var(--text-main);
+    color: var(--text-main);
     padding: 1rem 1.5rem;
     border-radius: 8px;
-    display: none; /* Hidden by default */
+    display: none;
     z-index: 2000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     font-weight: 500;
     animation: slideIn 0.5s ease-out;
 }
@@ -547,12 +533,6 @@ footer {
 }
 
 /* --- Animations --- */
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(217, 70, 239, 0.4); }
-    70% { box-shadow: 0 0 0 20px rgba(217, 70, 239, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(217, 70, 239, 0); }
-}
-
 @keyframes slideIn {
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
@@ -565,7 +545,7 @@ footer {
     }
     
     .nav-links {
-        display: none; /* Hide standard nav links on mobile */
+        display: none;
     }
     
     .hero-title {
