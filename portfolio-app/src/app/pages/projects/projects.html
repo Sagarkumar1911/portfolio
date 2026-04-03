@@ -1,10 +1,30 @@
 <section id="projects">
     <h2>My <span class="gradient-text">Projects</span></h2>
     
-    <div class="filter-buttons">
-        <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="filterProjects('all')">All</button>
-        <button class="filter-btn" [class.active]="activeFilter === 'Deep Learning'" (click)="filterProjects('Deep Learning')">Deep Learning</button>
-        <button class="filter-btn" [class.active]="activeFilter === 'Web Dev'" (click)="filterProjects('Web Dev')">Web Dev</button>
+    <div class="filter-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; align-items: center; margin-bottom: 2rem;">
+        <div class="filter-buttons" style="margin-bottom: 0;">
+            <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="filterProjects('all')">All</button>
+            <button class="filter-btn" [class.active]="activeFilter === 'Deep Learning'" (click)="filterProjects('Deep Learning')">Deep Learning</button>
+            <button class="filter-btn" [class.active]="activeFilter === 'Web Dev'" (click)="filterProjects('Web Dev')">Web Dev</button>
+        </div>
+
+        <div class="search-box" style="display: flex; gap: 0.5rem; align-items: center;">
+            <input 
+                type="number" 
+                [(ngModel)]="searchId" 
+                placeholder="Enter Project ID..." 
+                style="padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid var(--border-light); background: var(--bg-dark); color: white; width: 150px; outline: none;"
+                (keyup.enter)="searchProjectById()"
+            >
+            <button 
+                (click)="searchProjectById()"
+                style="padding: 0.5rem 1rem; border-radius: 20px; border: none; background: var(--accent); color: white; cursor: pointer; font-weight: bold; transition: opacity 0.3s;"
+                onmouseover="this.style.opacity='0.8'" 
+                onmouseout="this.style.opacity='1'"
+            >
+                Search <i class="fas fa-search"></i>
+            </button>
+        </div>
     </div>
 
     <div *ngIf="loading" class="projects-grid">
