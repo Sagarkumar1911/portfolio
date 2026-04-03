@@ -249,23 +249,6 @@ function showToast(msg) {
 // ==========================================
 loadContent();
 
-// Particle Canvas
-const canvas = document.getElementById('particle-canvas');
-if(canvas) {
-    const c = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    let particles = [];
-    class Particle {
-        constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = (Math.random() - 0.5); this.vy = (Math.random() - 0.5); this.size = Math.random() * 2 + 1; }
-        update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > canvas.width) this.vx *= -1; if (this.y < 0 || this.y > canvas.height) this.vy *= -1; }
-        draw() { c.beginPath(); c.arc(this.x, this.y, this.size, 0, Math.PI * 2); c.fillStyle = '#3b82f6'; c.fill(); }
-    }
-    function init() { particles = []; for (let i = 0; i < 50; i++) particles.push(new Particle()); }
-    function animate() { c.clearRect(0,0,canvas.width,canvas.height); particles.forEach((p,i)=>{p.update();p.draw();for(let j=i+1;j<particles.length;j++){const d=Math.hypot(p.x-particles[j].x,p.y-particles[j].y);if(d<150){c.beginPath();c.strokeStyle=`rgba(59,130,246,${1-d/150})`;c.moveTo(p.x,p.y);c.lineTo(particles[j].x,particles[j].y);c.stroke();}}});requestAnimationFrame(animate); }
-    init(); animate();
-    window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
-}
-
 // GPA Chart
 const gpaCtx = document.getElementById('gpaChart');
 if(gpaCtx) {
